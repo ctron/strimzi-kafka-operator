@@ -721,4 +721,18 @@ public class Util {
                     .collect(Collectors.joining("\n"));
         }
     }
+
+    public static Throwable aggregate(Throwable current, Throwable next) {
+        if (next == null) {
+            return current;
+        }
+
+        if (current == null) {
+            return next;
+        } else {
+            current.addSuppressed(next);
+            return current;
+        }
+    }
+
 }

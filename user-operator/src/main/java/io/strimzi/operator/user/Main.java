@@ -48,7 +48,7 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        LOGGER.info("UserOperator {} is starting", Main.class.getPackage().getImplementationVersion());
+        LOGGER.info("UserOperator (ctron) {} is starting", Main.class.getPackage().getImplementationVersion());
         UserOperatorConfig config = UserOperatorConfig.fromMap(System.getenv());
         //Setup Micrometer metrics options
         VertxOptions options = new VertxOptions().setMetricsOptions(

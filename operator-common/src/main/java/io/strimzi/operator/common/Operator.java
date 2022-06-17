@@ -24,6 +24,9 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * Abstraction of an operator which is driven by resources of a given {@link #kind()}.
  *
@@ -34,6 +37,8 @@ import java.util.function.Function;
  * An operator instance is not bound to a particular namespace. Rather the namespace is passed as a parameter.
  */
 public interface Operator {
+
+    Logger LOGGER = LogManager.getLogger(Operator.class);
 
     /**
      * The Kubernetes kind of the resource "consumed" by this operator
@@ -56,7 +61,9 @@ public interface Operator {
      * @param handler Handler called on completion.
      */
     default void reconcileAll(String trigger, String namespace, Handler<AsyncResult<Void>> handler) {
+        LOGGER.info("Reconcile all - trigger: {}, namespace: {} ...", trigger, namespace);
         allResourceNames(namespace).onComplete(ar -> {
+            LOGGER.info("Reconcile all - trigger: {}, namespace: {} ... Complete!", trigger, namespace);
             if (ar.succeeded()) {
                 reconcileThese(trigger, ar.result(), namespace, handler);
                 periodicReconciliationsCounter(namespace).increment();
